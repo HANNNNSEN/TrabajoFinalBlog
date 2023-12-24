@@ -40,10 +40,7 @@ class PostForm(forms.ModelForm):
         queryset=Categoria.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    visible = forms.BooleanField(
-        required=False,
-        widget=forms.CheckboxInput()
-    )
+
     imagen = forms.ImageField(
         widget=forms.FileInput(attrs={'class': 'form-control-file'})
     )

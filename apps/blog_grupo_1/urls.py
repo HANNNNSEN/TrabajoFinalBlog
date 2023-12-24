@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import InicioListView, NosotrosTemplateView, ContactoFormView, ContactoTemplateView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, ComentarioCreateView, ComentarioDeleteView, CategoriaListView, UserListView
+from .views import InicioListView, NosotrosTemplateView,PerfilTemplateView, ContactoFormView, ContactoTemplateView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, ComentarioCreateView, ComentarioDeleteView, CategoriaListView, UserListView
 
 app_name = 'apps.blog_grupo_1'
 
@@ -13,6 +13,11 @@ urlpatterns = [
         route='nosotros/',
         view=NosotrosTemplateView.as_view(),
         name='nosotros'
+    ),
+    path(
+        route='perfil/',
+        view=PerfilTemplateView.as_view(),
+        name='perfil'
     ),
     path(
         route='contacto/',
@@ -55,7 +60,7 @@ urlpatterns = [
         name='eliminar_comentario'
     ),
     path(
-        route='categoria/<int:marca_id>/',
+        route='categoria/<int:categoria_id>/',
         view=CategoriaListView.as_view(),
         name='categoria'
     ),
@@ -64,4 +69,5 @@ urlpatterns = [
         view=UserListView.as_view(),
         name='user'
     ),
+
 ]

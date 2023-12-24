@@ -8,7 +8,7 @@ from django.views import View
 from django.views.generic import TemplateView, FormView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post,Categoria, Comentario, Contacto
 from .forms import CrearComentarioForm, PostForm, ContactoForm
-
+from django.contrib.auth.models import Group
 
 class PostCreateView(UserPassesTestMixin, CreateView):
     model = Post
@@ -60,18 +60,19 @@ class PostDeleteView(UserPassesTestMixin, DeleteView):
     model = Post
     slug_field = 'url'
     slug_url_kwarg = 'url'
-    success_url = reverse_lazy('post:inicio')
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('blog:inicio')
     login_url = reverse_lazy('auth:login')
 
     def test_func(self):
-        grupos = ['Administrador']
+        grupos = ['Administrador', 'Colaborador']
         return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=grupo).exists() for grupo in grupos) or self.request.user == self.get_object().user
 
     def form_valid(self, form):
         # Obtener el objeto Auto
         post = self.get_object()
 
-        # Eliminar la imagen adociada
+        # Eliminar la imagen asociada
         if post.imagen:
             # Obtener la ruta completa del archivo de imagen
             image_path = post.imagen.path
@@ -97,11 +98,13 @@ class InicioListView(ListView):
         context['posteos_destacados'] = Post.objects.filter(
             destacado=True, visible=True)
         return context
-
+    
 
 class NosotrosTemplateView(TemplateView):
     template_name = 'blog/nosotros.html'
 
+class PerfilTemplateView(TemplateView):
+    template_name = 'blog/perfil.html'
 
 class ContactoFormView(FormView):
     form_class = ContactoForm
@@ -125,9 +128,9 @@ class PostDetailView(DetailView):
         context['posteos'] = Post.objects.filter(visible=True)
         context['categoria'] = Categoria.objects.all()
         context['comentarios'] = Comentario.objects.filter(
-            visible=True, auto=self.get_object()).all()
+            visible=True, post=self.get_object()).all()
         context['cantidad_comentarios'] = Comentario.objects.filter(
-            visible=True, auto=self.get_object()).all().count()
+            visible=True, post=self.get_object()).all().count()
         return context
 
 
@@ -159,21 +162,22 @@ class ComentarioCreateView(UserPassesTestMixin, CreateView):
 
 class ComentarioDeleteView(UserPassesTestMixin, DeleteView):
     model = Comentario
+    template_name = 'blog/comentario_confirm_delete.html'
     login_url = reverse_lazy('auth:login')
 
     def test_func(self):
-        grupos = ['Administrador']
+        grupos = ['Administrador', 'Colaborador']
         return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=grupo).exists() for grupo in grupos) or self.request.user == self.get_object().user
 
     def get_success_url(self):
-        url = self.object.auto.url
+        url = self.object.post.url
         return reverse_lazy('blog:detalle', kwargs={'url': url})
 
 
 class CategoriaListView(ListView):
     model = Post
     template_name = 'blog/index.html'
-    context_object_name = 'categoria'
+    context_object_name = 'posteos'
     paginate_by = 2
     ordering = ('-creado',)
 

@@ -1,7 +1,7 @@
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib import admin
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from apps.users.models import Perfil
 
 @admin.register(Perfil)
@@ -49,6 +49,10 @@ class UserAdmin(BaseUserAdmin):
         'is_active',
         'is_staff'
     )
+    list_editable = ('is_active',
+        'is_staff' )
+    
+
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

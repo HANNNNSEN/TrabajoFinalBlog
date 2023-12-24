@@ -49,8 +49,8 @@ class RegistroForm(forms.Form):
         perfil.save()
 
         Group.objects.get_or_create(name='Administrador')
-        Group.objects.get_or_create(name='Colaborador')
-        grupo, creado = Group.objects.get_or_create(name='Registrado')
+        Group.objects.get_or_create(name='Registrado')
+        grupo, creado=Group.objects.get_or_create(name='Colaborador')
 
         user.groups.add(grupo)
 

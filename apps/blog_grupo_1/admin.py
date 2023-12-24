@@ -5,10 +5,10 @@ from .models import Post,Categoria, Comentario
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'titulo', 'categoria',
-                    'destacado', 'visible', 'imagen')
+                    'destacado', 'visible', 'imagen','creado', 'modificado')
     search_fields = ('titulo', 'user__username', 'user__email')
     list_filter = ('creado', 'modificado')
-    list_editable = ('categoria', 'destacado', 'visible',)
+    list_editable = ('titulo', 'categoria','destacado', 'visible', 'imagen' )
 
     def get_form(self, request, obj=None, **kwargs):
         self.exclude = ('url',)
