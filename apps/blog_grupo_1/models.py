@@ -35,9 +35,9 @@ class Post (models.Model):
 
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ('creado',)
+    class Meta():
+            ordering = ('creado',)
+    
 
     def save(self, *args, **kwargs):
         self.url = slugify(self.titulo)

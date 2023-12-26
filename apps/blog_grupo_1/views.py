@@ -84,6 +84,62 @@ class PostDeleteView(UserPassesTestMixin, DeleteView):
         return super().form_valid(form)
 
 
+class OrdenarMasNuevoListView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'posteos'
+    paginate_by = 2
+    queryset = Post.objects.filter(visible=True).order_by('-creado')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categoria'] = Categoria.objects.all()
+        context['posteos_destacados'] = Post.objects.filter(
+            destacado=True, visible=True)
+        return context
+    
+class OrdenarAZListView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'posteos'
+    paginate_by = 2
+    queryset = Post.objects.filter(visible=True).order_by('titulo')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categoria'] = Categoria.objects.all()
+        context['posteos_destacados'] = Post.objects.filter(
+            destacado=True, visible=True)
+        return context
+    
+class OrdenarZAListView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'posteos'
+    paginate_by = 2
+    queryset = Post.objects.filter(visible=True).order_by('-titulo')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categoria'] = Categoria.objects.all()
+        context['posteos_destacados'] = Post.objects.filter(
+            destacado=True, visible=True)
+        return context    
+    
+class OrdenarMasAntiguoListView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'posteos'
+    paginate_by = 2
+    queryset= Post.objects.filter(visible=True).order_by('creado')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categoria'] = Categoria.objects.all()
+        context['posteos_destacados'] = Post.objects.filter(
+            destacado=True, visible=True)
+        return context
+    
 class InicioListView(ListView):
     model = Post
     template_name = 'blog/index.html'
@@ -179,7 +235,7 @@ class CategoriaListView(ListView):
     template_name = 'blog/index.html'
     context_object_name = 'posteos'
     paginate_by = 2
-    ordering = ('-creado',)
+    ordering = ('titulo',)
 
     def get_queryset(self):
         post = None
@@ -203,7 +259,7 @@ class UserListView(ListView):
     context_object_name = 'posteos'
     paginate_by = 2
     ordering = ('-creado',)
-
+    
     def get_queryset(self):
         auto = None
         if self.kwargs['nombre']:

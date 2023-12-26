@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import InicioListView, NosotrosTemplateView,PerfilTemplateView, ContactoFormView, ContactoTemplateView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, ComentarioCreateView, ComentarioDeleteView, CategoriaListView, UserListView
+from .views import InicioListView,OrdenarZAListView,OrdenarAZListView,OrdenarMasAntiguoListView, OrdenarMasNuevoListView, NosotrosTemplateView,PerfilTemplateView, ContactoFormView, ContactoTemplateView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, ComentarioCreateView, ComentarioDeleteView, CategoriaListView, UserListView
 
 app_name = 'apps.blog_grupo_1'
 
@@ -8,6 +8,26 @@ urlpatterns = [
         route='',
         view=InicioListView.as_view(),
         name='inicio'
+    ),
+    path(
+        route='post_orden_mas_nuevos/',
+        view=OrdenarMasNuevoListView.as_view(),
+        name='ordenar_mas_nuevo'
+    ),
+    path(
+        route='post_orden_mas_antiguos/',
+        view=OrdenarMasAntiguoListView.as_view(),
+        name='ordenar_mas_antiguo'
+    ),   
+    path(
+        route='post_orden_A_Z/',
+        view=OrdenarAZListView.as_view(),
+        name='ordenar_A_Z'
+    ),   
+    path(
+        route='post_orden_Z_A/',
+        view=OrdenarZAListView.as_view(),
+        name='ordenar_Z_A'
     ),
     path(
         route='nosotros/',
