@@ -38,7 +38,7 @@ class PostUpdateView(UserPassesTestMixin, UpdateView):
     template_name = 'blog/post/postear.html'
     slug_field = 'url'
     slug_url_kwarg = 'url'
-    success_url = reverse_lazy('post:inicio')
+    success_url = reverse_lazy('blog:inicio')
     login_url = reverse_lazy('auth:login')
 
     def test_func(self):
